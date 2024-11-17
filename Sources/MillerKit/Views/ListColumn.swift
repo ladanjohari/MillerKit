@@ -39,7 +39,8 @@ public struct ListColumn: View {
 
     public var body: some View {
         VStack {
-            let itemsWithIndex: [(offset: Int, element: Item)] = items.sorted().enumerated().map { $0 }
+            //  let itemsWithIndex: [(offset: Int, element: Item)] = items.sorted().enumerated().map { $0 }
+            let itemsWithIndex: [(offset: Int, element: Item)] = items.enumerated().map { $0 }
             List(itemsWithIndex, id: \.element) { (offset, item) in
                 VStack(alignment: .leading) {
                     HStack {
