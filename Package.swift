@@ -21,5 +21,10 @@ let package = Package(
             name: "MillerKitTests",
             dependencies: ["MillerKit"]
         ),
+        .executableTarget(
+            name: "JSONBrowser",
+            dependencies: ["MillerKit"]
+        ),
+        
     ]
 )

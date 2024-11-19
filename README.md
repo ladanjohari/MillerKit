@@ -43,44 +43,56 @@ millerView.frame = view.bounds
 //Implement the MillerColumnViewDataSource and MillerColumnViewDelegate protocols to provide data and handle user interactions.
 
 import MillerKit
+```
 
-//Example Code
+## Custom Example
 
-class ViewController: UIViewController, MillerColumnViewDataSource, MillerColumnViewDelegate {
-    let millerView = MillerColumnView()
+Here’s an example of using MillerKit with JSON parsing to populate a MillerColumnView:
 
-    let data = [
-        ["Item 1", "Item 2", "Item 3"],
-        ["Subitem 1.1", "Subitem 1.2"],
-        ["Sub-subitem 1.1.1"]
-    ]
+```
+import Foundation
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        millerView.dataSource = self
-        millerView.delegate = self
-        view.addSubview(millerView)
-        millerView.frame = view.bounds
+extension Item {
+    // Main function to parse JSON from a string
+    public static func fromJSON(from jsonString: String, name: String = "root", priority: UInt = 4) -> Item? {
+        guard let data = jsonString.data(using: .utf8) else {
+            print("Invalid JSON string encoding.")
+            return nil
+        }
+        
+        do {
+            let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
+            return Self.fromJSON(name: name, json: jsonObject, priority: priority)
+        } catch {
+            print("Failed to parse JSON: \(error)")
+            return nil
+        }
     }
-
-    // MARK: - MillerColumnViewDataSource
-    func millerColumnView(_ millerColumnView: MillerColumnView, numberOfItemsInColumn column: Int) -> Int {
-        return data[column].count
-    }
-
-    func millerColumnView(_ millerColumnView: MillerColumnView, itemAtIndex index: Int, inColumn column: Int) -> String {
-        return data[column][index]
-    }
-
-    // MARK: - MillerColumnViewDelegate
-    func millerColumnView(_ millerColumnView: MillerColumnView, didSelectItemAtIndex index: Int, inColumn column: Int) {
-        print("Selected item: \(data[column][index])")
+    
+    // Recursive function to convert parsed JSON into `Item` instances
+    public static func fromJSON(name: String, json: Any, priority: UInt = 4) -> Item {
+        if let dictionary = json as? [String: Any] {
+                // JSON is a dictionary, treat keys as subItems
+            let subItems = dictionary.map { key, value in
+                fromJSON(name: key, json: value, priority: priority)
+            }
+            return Item(name, priority: priority, subItems: subItems)
+        } else if let array = json as? [Any] {
+                // JSON is an array, create subItems for each element in the array
+            let subItems = array.enumerated().map { index, value in
+                Self.fromJSON(name: "\(name)[\(index)]", json: value, priority: priority)
+            }
+            return Item(name, priority: priority, subItems: subItems)
+        } else {
+                // JSON is a literal, store its value in documentation
+            return Item(name, priority: priority, documentation: "\(json)")
+        }
     }
 }
+```
 
 
-
-Requirements
+## Requirements
 
 iOS/macOS: Minimum version supported (add details here).
 Swift: Version 5.7 or higher.
@@ -90,19 +102,19 @@ Comprehensive documentation and API references are available here (add this link
 
 
 
-Contributing
+## Contributing
 
 Contributions are welcome!
 If you'd like to contribute, please fork the repository and submit a pull request. For major changes, please open an issue first to discuss what you'd like to change.
 
 
 
-License
+## License
 
 MillerKit is available under the MIT License. See the LICENSE file for more details.
 
 
 
-Contact
+## Contact
 
 For questions or feature requests, please open an issue or contact Ladan Johari.
