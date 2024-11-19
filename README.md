@@ -1,47 +1,59 @@
 # MillerKit
 
-MillerKit is a Swift package for creating and managing Miller Columns – a user interface pattern for navigating hierarchical data efficiently. Whether you're building a macOS app or any project needing a clean, column-based navigation solution, MillerKit provides the tools to make it easy and flexible.
+MillerKit is a Swift package designed to simplify the implementation of **Miller Columns**, a powerful user interface for navigating hierarchical data. With MillerKit, you can seamlessly integrate this UI pattern into your macOS or iOS applications, offering users an efficient and visually appealing way to browse structured content.
 
-Features
+## Features
 
-🗂 Dynamic Column Navigation: Effortlessly navigate through hierarchies with dynamically generated columns.
-🎨 Customizable UI: Adapt the appearance to match your application's style.
-🔌 Plug-and-Play Integration: Easy integration into Swift-based projects.
-⚡️ Optimized for Performance: Smooth transitions and updates for complex hierarchies.
+- **Dynamic Column Navigation**: Automatically generates columns for hierarchical data.
+- **Customizable Appearance**: Adapt the UI to fit your app’s style.
+- **Lightweight and Performant**: Designed with efficiency and smooth performance in mind.
+- **Plug-and-Play**: Easy to integrate into your existing Swift projects.
 
-Preview
+## Preview
 
-[ screenshots or GIFs of MillerKit implementation here.]
+[Add screenshots or animated GIFs here showcasing MillerKit in action!]
 
+## Installation
 
-Installation
+### Using Swift Package Manager (SPM)
 
-Using Swift Package Manager (SPM)
-Open your project in Xcode.
-Go to File > Add Packages....
-Paste the following repository URL into the search bar:
+1. Open your Xcode project.
+2. Go to **File > Add Packages...**.
+3. Paste the following repository URL:
+
 https://github.com/ladanjohari/MillerKit
-Select the version or branch you want, then click Add Package.
 
+4. Select the branch, tag, or version you want to use and click **Add Package**.
 
-Usage
+## Usage
 
-Basic Setup
-Import the MillerKit module:
+### Basic Setup
+
+1. Import the `MillerKit` module:
+```swift
 import MillerKit
-Initialize a MillerColumnView in your project:
+
+//Add a MillerColumnView to your interface:
 let millerView = MillerColumnView()
 millerView.dataSource = self
 millerView.delegate = self
-Conform to the MillerColumnViewDataSource and MillerColumnViewDelegate protocols to provide data and handle user interactions.
-Example
-Here's a simple example to get you started:
+view.addSubview(millerView)
+millerView.frame = view.bounds
 
+//Implement the MillerColumnViewDataSource and MillerColumnViewDelegate protocols to provide data and handle user interactions.
 
 import MillerKit
 
+//Example Code
+
 class ViewController: UIViewController, MillerColumnViewDataSource, MillerColumnViewDelegate {
     let millerView = MillerColumnView()
+
+    let data = [
+        ["Item 1", "Item 2", "Item 3"],
+        ["Subitem 1.1", "Subitem 1.2"],
+        ["Sub-subitem 1.1.1"]
+    ]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,18 +65,19 @@ class ViewController: UIViewController, MillerColumnViewDataSource, MillerColumn
 
     // MARK: - MillerColumnViewDataSource
     func millerColumnView(_ millerColumnView: MillerColumnView, numberOfItemsInColumn column: Int) -> Int {
-        return myHierarchy[column].count
+        return data[column].count
     }
 
     func millerColumnView(_ millerColumnView: MillerColumnView, itemAtIndex index: Int, inColumn column: Int) -> String {
-        return myHierarchy[column][index].name
+        return data[column][index]
     }
 
     // MARK: - MillerColumnViewDelegate
     func millerColumnView(_ millerColumnView: MillerColumnView, didSelectItemAtIndex index: Int, inColumn column: Int) {
-        // Handle selection
+        print("Selected item: \(data[column][index])")
     }
 }
+
 
 
 Requirements
