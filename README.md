@@ -6,12 +6,14 @@ MillerKit is a Swift package designed to simplify the implementation of **Miller
 
 - **Dynamic Column Navigation**: Automatically generates columns for hierarchical data.
 - **Customizable Appearance**: Adapt the UI to fit your app’s style.
-- **Lightweight and Performant**: Designed with efficiency and smooth performance in mind.
-- **Plug-and-Play**: Easy to integrate into your existing Swift projects.
+- **Lightweight and Performant**: Designed with efficiency and smooth performance for complex hierarchies.
+- **Plug-and-Play**: Easy to integrate into Swift-based projects.
+  
 
 ## Preview
 
-![MillerKit in action!](https://github.com/user-attachments/assets/a72e9fa1-f450-4544-a0ae-e9d42a7b171d)
+### MillerKit in action!
+<img width="1137" alt="Screenshot 2024-11-19 at 4 44 04 PM" src="https://github.com/user-attachments/assets/3ccc9cc5-5359-48dd-8e5f-741f615553ca">
 
 ## Installation
 
@@ -65,11 +67,8 @@ struct ContentView: View {
 
 ## Requirements
 
-iOS/macOS: Minimum version supported (add details here).
+**iOS/macOS:** Minimum version supported (add details here).
 Swift: Version 5.7 or higher.
-Documentation
-
-Comprehensive documentation and API references are available here (add this link or update based on availability).
 
 
 
@@ -82,7 +81,7 @@ If you'd like to contribute, please fork the repository and submit a pull reques
 
 ## License
 
-MillerKit is available under the MIT License. See the LICENSE file for more details.
+MillerKit is available under the MIT License.
 
 
 
