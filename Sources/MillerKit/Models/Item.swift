@@ -1,7 +1,7 @@
 import Foundation
 import SwiftUI
 
-public enum Status: Equatable, Hashable {
+public enum Status: Equatable, Hashable, Codable {
     case todo
     case planning
     case doing
@@ -11,7 +11,7 @@ public enum Status: Equatable, Hashable {
     case blocked(on: String)
 }
 
-public struct Item: Identifiable, Hashable, Equatable, Comparable {
+public struct Item: Identifiable, Hashable, Equatable, Comparable, Codable {
     public let id = UUID()
     public let name: String
     public let status: Status?
