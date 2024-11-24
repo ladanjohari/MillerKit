@@ -1,5 +1,6 @@
 import Foundation
 import SwiftUI
+import TSCUtility
 
 public enum Status: Equatable, Hashable, Codable {
     case todo
@@ -9,6 +10,67 @@ public enum Status: Equatable, Hashable, Codable {
     case paused
     case cancelled
     case blocked(on: String)
+}
+
+
+
+
+extension Item {
+    func icon(offset: Int) -> some View {
+        Text("\(numberToLetterSequence(offset+1))")
+            .font(.footnote)  // Smaller text size
+            .fontWeight(.bold)
+            .frame(minWidth: 15, minHeight: 15)  // Ensure perfect square
+            .background(
+                RoundedRectangle(cornerRadius: 5)
+                    .fill(self.colorBasedOnChildren)
+            )
+            .foregroundColor(.white)
+    }
+
+    func body(offset: Int) -> some View {
+        VStack(alignment: .leading) {
+            HStack {
+                self.icon(offset: offset)
+
+                // let priorityStr: String = "(P\(item.priority)) "
+                let priorityStr = ""
+
+                Text("\(self.starred ? "🌟 " : "")\(priorityStr)\(self.name)")
+                    .font(.headline)
+
+                Spacer()
+                HStack {
+                    ForEach(self.assignedTo, id: \.self) { assignee in
+                        Text("\(assignee)")
+                            .frame(minWidth: 15, minHeight: 15)
+                            .font(.footnote)
+                            .fontWeight(.bold)
+                            .padding(2)
+                            .foregroundStyle(.white.gradient)
+                            .background(RoundedRectangle(cornerRadius: 5).fill(.blue))
+                    }
+                }
+
+                
+                Text("\(self.subItems?.count ?? 0)")
+            }
+
+            // Show documentation (if available)
+            if let documentation = self.documentation {
+                Text("\(documentation)")
+                    .font(.footnote)
+                    .foregroundColor(.secondary)
+            }
+
+            if self.ancestors.count > 0 {
+                Text("\(self.ancestors.joined(separator: " → "))")
+                    .font(.footnote)
+                    .foregroundColor(.secondary)
+                    .fontWeight(.bold)
+            }
+        }.frame(maxWidth: .infinity, alignment: .leading)
+    }
 }
 
 public struct Item: Identifiable, Hashable, Equatable, Comparable, Codable {
