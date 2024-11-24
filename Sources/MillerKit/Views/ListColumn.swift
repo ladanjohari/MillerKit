@@ -39,67 +39,16 @@ public struct ListColumn: View {
 
     public var body: some View {
         VStack {
-            //  let itemsWithIndex: [(offset: Int, element: Item)] = items.sorted().enumerated().map { $0 }
             let itemsWithIndex: [(offset: Int, element: Item)] = items.enumerated().map { $0 }
             List(itemsWithIndex, id: \.element) { (offset, item) in
-                VStack(alignment: .leading) {
-                    HStack {
-                        //Text(item.symbolKind.caps)
-                        Text("\(numberToLetterSequence(offset+1))")
-                            .font(.footnote)  // Smaller text size
-                            .fontWeight(.bold)
-                            .frame(minWidth: 15, minHeight: 15)  // Ensure perfect square
-                            .background(
-                                RoundedRectangle(cornerRadius: 5)
-                                    .fill(item.colorBasedOnChildren)
-                            )
-                            .foregroundColor(.white)
-
-                        // let priorityStr: String = "(P\(item.priority)) "
-                        let priorityStr = ""
-
-                        Text("\(item.starred ? "🌟 " : "")\(priorityStr)\(item.name)")
-                            .font(.headline)
-
-                        Spacer()
-                        HStack {
-                            ForEach(item.assignedTo, id: \.self) { assignee in
-                                Text("\(assignee)")
-                                    .frame(minWidth: 15, minHeight: 15)
-                                    .font(.footnote)
-                                    .fontWeight(.bold)
-                                    .padding(2)
-                                    .foregroundStyle(.white.gradient)
-                                    .background(RoundedRectangle(cornerRadius: 5).fill(.blue))
-                            }
-                        }
-
-                        
-                        Text("\(item.subItems?.count ?? 0)")
-                    }
-
-                    // Show documentation (if available)
-                    if let documentation = item.documentation {
-                        Text("\(documentation)")
-                            .font(.footnote)
-                            .foregroundColor(.secondary)
-                    }
-
-                    if item.ancestors.count > 0 {
-                        Text("\(item.ancestors.joined(separator: " → "))")
-                            .font(.footnote)
-                            .foregroundColor(.secondary)
-                            .fontWeight(.bold)
-                    }
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
+                item.body(offset: offset)
                 .background(getBackgroundColor(for: item))
                 .onTapGesture {
-                        // Set the current item as selected
+                    // Set the current item as selected
                     selectedItem = item
                     lastSelectedItem = item
                     
-                        // Reset the selections for subsequent columns
+                    // Reset the selections for subsequent columns
                     for i in (columnIndex + 1)..<selectedItems.count {
                         selectedItems[i] = nil
                     }
