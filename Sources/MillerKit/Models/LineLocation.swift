@@ -1,4 +1,4 @@
-public struct LineLocation: Equatable, Hashable {
+public struct LineLocation: Equatable, Hashable, Codable {
     public let fromLine: Int
     public let fromIndex: Int
     public let toLine: Int

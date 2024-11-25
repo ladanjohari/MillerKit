@@ -1,6 +1,6 @@
 import SwiftUI
 
-public enum SymbolKind: Hashable {
+public enum SymbolKind: Hashable, Codable {
     case `class`
     case `struct`
     case target
