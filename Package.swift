@@ -12,11 +12,20 @@ let package = Package(
             name: "MillerKit",
             targets: ["MillerKit"]),
     ],
+    dependencies: [
+        .package(url: "https://github.com/apple/swift-llbuild2", branch: "main"),
+        .package(url: "https://github.com/apple/swift-async-algorithms", branch: "main")
+    ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "MillerKit"),
+            name: "MillerKit",
+            dependencies: [
+                .product(name: "llbuild2fx", package: "swift-llbuild2"),
+                .product(name: "AsyncAlgorithms", package: "swift-async-algorithms")
+            ]
+        ),
         .testTarget(
             name: "MillerKitTests",
             dependencies: ["MillerKit"]
