@@ -12,7 +12,7 @@ public struct Attribute {
     let name: String
     let value: AttributeValue
 
-    static func documentation(_ doc: String) -> Self {
+    public static func documentation(_ doc: String) -> Self {
         return .init(name: "documentation", value: .stringValue(doc))
     }
 }

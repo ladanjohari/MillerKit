@@ -1,14 +1,12 @@
 import Foundation
 
-func numberStream() -> AsyncStream<Int> {
+public func numberStream() -> AsyncStream<Int> {
     AsyncStream { continuation in
         Task {
             // Generate numbers from 1 to 5 with a delay
-            while true {
-                try await (1...5).parallelMap { number in
-                    try await randomDelay()
-                    continuation.yield(number) // Emit a value to the stream
-                }
+            try await (1...5).parallelMap { number in
+                try await randomDelay()
+                continuation.yield(number) // Emit a value to the stream
             }
             continuation.finish() // End the stream
         }
@@ -34,7 +32,7 @@ func itemStream(for number: Int) -> AsyncStream<LazyItem> {
     }
 }
 
-func chainStreams<Input, Output>(
+public func chainStreams<Input, Output>(
     inputStream: AsyncStream<Input>,
     pureTransform: @escaping (Input) async -> Output
 ) -> AsyncStream<Output> {
@@ -49,7 +47,7 @@ func chainStreams<Input, Output>(
     }
 }
 
-func chainStreams<Input, Output>(
+public func chainStreams<Input, Output>(
     inputStream: AsyncStream<Input>,
     transform: @escaping (Input) async -> AsyncStream<Output>
 ) -> AsyncStream<Output> {
@@ -73,7 +71,8 @@ public let exampleLazyItem: LazyItem = .init(
     },
     attributes: { ctx in
         return .init(unfolding: {
-            .documentation(greetingBasedOnTime())
+            // .documentation(greetingBasedOnTime())
+            nil
         })
     }
 )
