@@ -111,8 +111,9 @@ extension LazyItem {
                     
                     Text("\(self.name)")
                         .font(.headline)
-                    Spacer()
                 }
+                Spacer()
+                viewNumberOfChildren
             }
             viewDocumentation
         }.frame(maxWidth: .infinity, alignment: .leading)

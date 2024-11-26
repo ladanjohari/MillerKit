@@ -1,5 +1,16 @@
 import Foundation
 
+public var nullStream: AsyncStream<()> = AsyncStream { cont in
+    cont.finish()
+}
+
+public func singletonStream<Elem>(_ elem: Elem) -> AsyncStream<Elem> {
+    AsyncStream { cont in
+        cont.yield(elem)
+        cont.finish()
+    }
+}
+
 public func numberStream() -> AsyncStream<Int> {
     AsyncStream { continuation in
         Task {
