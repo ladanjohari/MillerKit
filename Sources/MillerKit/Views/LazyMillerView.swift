@@ -7,11 +7,12 @@ public struct LazyMillerView: View {
 
     @State private var totalColumns: Int = 6
 
-    @State var root: LazyItem
+    @State var root: LazyItem? = nil
 
-    public init(root: LazyItem) {
-        self.root = root
-        selectionsPerColumn[0] = root
+    var rootStream: AsyncStream<LazyItem>
+
+    public init(rootStream: AsyncStream<LazyItem>) {
+        self.rootStream = rootStream
     }
 
     func handleCommandNumber(_ number: Int) {
@@ -20,16 +21,27 @@ public struct LazyMillerView: View {
     
     public var body: some View {
         VStack {
-            millerColumns
+            if let root {
+                millerColumns
+            } else {
+                Text("...")
+            }
+        }.task {
+            Task {
+                for await root_ in rootStream {
+                    print("Hello world \(root_.id)")
+                    root = root_
+                }
+            }
         }
     }
-    
+
     var millerColumns: some View {
-        VStack(spacing: 0) {
+        return VStack(spacing: 0) {
             GeometryReader { geometry in
                 HStack(spacing: 0) {
                     LazyListColumn(
-                        items: root.subItems!,
+                        root: $root,
                         selectedItem: $selectedItem,
                         selectionsPerColumn: $selectionsPerColumn,
                         columnIndex: 0
@@ -38,7 +50,7 @@ public struct LazyMillerView: View {
                     ForEach(Array(selectionsPerColumn.compactMap { $0 }.enumerated()), id: \.element.id) { index, selection in
                         if let firstSelection = selectionsPerColumn[index] {
                             LazyListColumn(
-                                items: firstSelection.subItems ?? { ctx in .init(unfolding: { nil }) },
+                                root: .constant(firstSelection),
                                 selectedItem: $selectedItem,
                                 selectionsPerColumn: $selectionsPerColumn,
                                 columnIndex: index+1
@@ -48,10 +60,8 @@ public struct LazyMillerView: View {
                         }
                     }
                 }
-            }.frame(maxWidth: .infinity, maxHeight: .infinity)
-            
+            }.frame(maxWidth: .infinity, maxHeight: .infinity)   
         }
-        
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }

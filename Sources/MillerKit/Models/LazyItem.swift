@@ -3,52 +3,118 @@ import TSCUtility
 import SwiftUI
 
 public struct LazyItem: Identifiable, Equatable {
-    public let id = UUID()
+    public let id: String
+    public let urn: String?
     public let name: String
     public let subItems: ((Context) -> AsyncStream<LazyItem>)?
     public let attributes: ((Context) -> AsyncStream<Attribute>)?
 
     public static func == (lhs: LazyItem, rhs: LazyItem) -> Bool {
-        return lhs.id == rhs.id
+        return lhs.id == rhs.id && lhs.name == rhs.name
     }
 
-    init(
+    public func withURN(_ urn: String) -> LazyItem {
+        return LazyItem(name, urn: urn, subItems: subItems, attributes: attributes)
+    }
+
+    public init(
         _ name: String,
+        urn: String? = nil,
         subItems: ((Context) -> AsyncStream<LazyItem>)? = nil,
         attributes: ((Context) -> AsyncStream<Attribute>)? = nil
     ) {
         self.name = name
         self.subItems = subItems
         self.attributes = attributes
+        self.id = UUID().uuidString
+        self.urn = urn
+    }
+
+    public func documentation() -> AsyncStream<String?> {
+        AsyncStream { cont in
+            Task {
+                cont.yield(nil)
+                if let attributes {
+                    for await doc in attributes(Context()) {
+                        if doc.name == "documentation" {
+                            switch doc.value {
+                            case .stringValue(let str):
+                                cont.yield(str)
+                            default:
+                                cont.yield("\(doc)")
+                            }
+                        }
+                    }
+                } else {
+                    cont.finish()
+                }
+            }
+        }
+    }
+
+    public func staticPriority() -> Int {
+        staticPriority_().first ?? 999
+    }
+
+    public func staticPriority_() -> [Int] {
+        let input = self.name
+        if input.contains("🪴") {
+            return [0]
+        }
+
+        // Define the regex pattern to match `(P1)`, `(P2)`, etc.
+        let pattern = #"\(P(\d+)\)"#
+        
+        // Create a regular expression instance
+        guard let regex = try? NSRegularExpression(pattern: pattern) else {
+            return []
+        }
+        
+        // Find matches in the input string
+        let matches = regex.matches(in: input, range: NSRange(input.startIndex..., in: input))
+        
+        // Extract numbers from matches
+        return matches.compactMap { match in
+            if let range = Range(match.range(at: 1), in: input) {
+                return Int(input[range])
+            }
+            return nil
+        }
     }
 }
 
 
 extension LazyItem {
-    func icon(offset: Int) -> some View {
-        Text("\(numberToLetterSequence(offset+1))")
+    func iconSquare(_ text: String) -> some View {
+        Text(text)
             .font(.footnote)  // Smaller text size
             .fontWeight(.bold)
             .frame(minWidth: 15, minHeight: 15)  // Ensure perfect square
             .background(
-                RoundedRectangle(cornerRadius: 5)
+                RoundedRectangle(cornerRadius: 5).fill(.purple)
             )
-            .foregroundColor(.white)
+    }
+
+    func icon(offset: Int) -> some View {
+        iconSquare(numberToLetterSequence(offset+1))
     }
 
     func body(offset: Int) -> some View {
         VStack(alignment: .leading) {
             HStack {
-                self.icon(offset: offset)
-
-                // let priorityStr: String = "(P\(item.priority)) "
-                let priorityStr = ""
-
-                Text("\(self.name)")
-                    .font(.headline)
-
-                Spacer()
+                if !self.name.isEmpty {
+                    self.icon(offset: offset)
+                    
+                        // let priorityStr: String = "(P\(item.priority)) "
+                    let priorityStr = ""
+                    
+                    
+                    Text("\(self.name)")
+                        .font(.headline)
+                    Spacer()
+                }
             }
+            viewDocumentation
         }.frame(maxWidth: .infinity, alignment: .leading)
     }
 }
