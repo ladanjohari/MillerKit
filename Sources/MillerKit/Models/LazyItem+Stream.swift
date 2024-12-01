@@ -24,8 +24,8 @@ public func numberStream() -> AsyncStream<Int> {
     }
 }
 
-func randomDelay() async throws {
-    try await Task.sleep(nanoseconds: UInt64(500_000_000*Double.random(in: 0...1))) // Simulate delay
+public func randomDelay() async throws {
+    try await Task.sleep(nanoseconds: UInt64(4*500_000_000*Double.random(in: 0...1))) // Simulate delay
 }
 // Stream 2: Produces letters for each number
 func itemStream(for number: Int) -> AsyncStream<LazyItem> {

@@ -41,8 +41,8 @@ extension LazyItem {
         }
     }
 
-    var viewDocumentation: some View {
-        let stream = self.documentation()
+    func viewDocumentation(ctx: Context) -> some View {
+        let stream = self.documentation(ctx: ctx)
 
         return RealtimeStreamView(stream: stream, content: { str in
             if let doc = str {
@@ -55,5 +55,20 @@ extension LazyItem {
                 Text("")
             }
         })
+    }
+}
+
+extension AsyncStream {
+    public func pureMap<B>(_ transform: @escaping ((Element) -> B)) -> AsyncStream<B> {
+        let res: AsyncStream<B> = AsyncStream<B> { cont in
+            Task {
+                for await item in self {
+                    let res: B = transform(item)
+                    cont.yield(res)
+                }
+                cont.finish()
+            }
+        }
+        return res
     }
 }

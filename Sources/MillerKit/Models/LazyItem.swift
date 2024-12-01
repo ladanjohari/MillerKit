@@ -8,6 +8,8 @@ public struct LazyItem: Identifiable, Equatable {
     public let name: String
     public let subItems: ((Context) -> AsyncStream<LazyItem>)?
     public let attributes: ((Context) -> AsyncStream<Attribute>)?
+    public let staticAttributes: [Attribute]
+    var alternativeSubItems: ((LazyItem, String) async throws  -> AsyncStream<LazyItem>)?
 
     public static func == (lhs: LazyItem, rhs: LazyItem) -> Bool {
         return lhs.id == rhs.id && lhs.name == rhs.name
@@ -21,21 +23,34 @@ public struct LazyItem: Identifiable, Equatable {
         _ name: String,
         urn: String? = nil,
         subItems: ((Context) -> AsyncStream<LazyItem>)? = nil,
-        attributes: ((Context) -> AsyncStream<Attribute>)? = nil
+        attributes: ((Context) -> AsyncStream<Attribute>)? = nil,
+        staticAttributes: [Attribute] = [],
+        alternativeSubItems: ((LazyItem, String) async throws  -> AsyncStream<LazyItem>)? = nil
     ) {
         self.name = name
         self.subItems = subItems
         self.attributes = attributes
         self.id = UUID().uuidString
         self.urn = urn
+        self.staticAttributes = staticAttributes
+        self.alternativeSubItems = alternativeSubItems
     }
 
-    public func documentation() -> AsyncStream<String?> {
+    public func prompt() -> String? {
+        for attr in staticAttributes {
+            if attr.name == "prompt" {
+                return attr.value.stringValue
+            }
+        }
+        return nil
+    }
+
+    public func documentation(ctx: Context) -> AsyncStream<String?> {
         AsyncStream { cont in
             Task {
                 cont.yield(nil)
                 if let attributes {
-                    for await doc in attributes(Context()) {
+                    for await doc in attributes(ctx) {
                         if doc.name == "documentation" {
                             switch doc.value {
                             case .stringValue(let str):
@@ -99,7 +114,7 @@ extension LazyItem {
         iconSquare(numberToLetterSequence(offset+1))
     }
 
-    func body(offset: Int) -> some View {
+    func body(offset: Int, ctx: Context) -> some View {
         VStack(alignment: .leading) {
             HStack {
                 if !self.name.isEmpty {
@@ -113,9 +128,9 @@ extension LazyItem {
                         .font(.headline)
                 }
                 Spacer()
-                viewNumberOfChildren
+                // viewNumberOfChildren
             }
-            viewDocumentation
+            viewDocumentation(ctx: ctx)
         }.frame(maxWidth: .infinity, alignment: .leading)
     }
 }

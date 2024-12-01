@@ -3,6 +3,7 @@ import SwiftUI
 public enum SymbolKind: Hashable, Codable {
     case `class`
     case `struct`
+    case `function`
     case target
     case `enum`
     case `enumCase`
@@ -20,6 +21,11 @@ public enum SymbolKind: Hashable, Codable {
     case historical
     case topic
 
+
+    case file
+    case codeBlock
+    case codeBlockList
+    case variable
 
     public var caps: String {
         switch self {
@@ -57,6 +63,16 @@ public enum SymbolKind: Hashable, Codable {
             "P"
         case .topic:
             "T"
+        case .file:
+            "F"
+        case .codeBlock:
+            "{}"
+        case .codeBlockList:
+            "[{}]"
+        case .variable:
+            "V"
+        case .function:
+            "f"
         }
     }
 

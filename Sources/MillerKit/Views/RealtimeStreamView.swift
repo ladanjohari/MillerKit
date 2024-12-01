@@ -35,6 +35,7 @@ public struct RealtimeStreamView<Item, Content: View>: View {
 
     public init(
         stream: AsyncStream<Item>,
+        wipeOnNewEntries: Bool = true,
         @ViewBuilder content: @escaping (Item?) -> Content
     ) {
         self.stream = stream
