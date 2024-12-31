@@ -45,6 +45,31 @@ public struct LazyItem: Identifiable, Equatable {
         return nil
     }
 
+    public func tags(ctx: Context) -> AsyncStream<[String]> {
+        AsyncStream { cont in
+            Task {
+                if let attributes {
+                    for await doc in attributes(ctx) {
+                        print(doc)
+                        if doc.name == "tags" {
+                            switch doc.value {
+                            case .listValue(let el):
+                                cont.yield(el.map { $0.stringValue })
+                            default:
+                                cont.yield([])
+                            }
+                        }
+                    }
+                    cont.yield([])
+                    cont.finish()
+                } else {
+                    cont.yield([])
+                    cont.finish()
+                }
+            }
+        }
+    }
+
     public func documentation(ctx: Context) -> AsyncStream<String?> {
         AsyncStream { cont in
             Task {
@@ -64,6 +89,30 @@ public struct LazyItem: Identifiable, Equatable {
                     cont.finish()
                 }
             }
+        }
+    }
+
+    public func staticCreatedAt() -> Date? {
+        if let createdAt = staticAttributes.first(where: { $0.name == "createdAt" })?.value {
+            switch createdAt {
+            case .dateValue(let date):
+                return date
+            default: return nil
+            }
+        } else {
+            return nil
+        }
+    }
+
+    public func staticCategory() -> String? {
+        if let category = staticAttributes.first(where: { $0.name == "category" })?.value {
+            switch category {
+            case .stringValue(let cat):
+                return cat
+            default: return nil
+            }
+        } else {
+            return nil
         }
     }
 

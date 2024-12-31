@@ -2,5 +2,10 @@ import Testing
 @testable import MillerKit
 
 @Test func example() async throws {
-    // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+    let item = LazyItem("My item", subItems: { ctx in
+        AsyncStream { cont in
+            cont.yield(LazyItem("child 1"))
+            cont.yield(LazyItem("child 2"))
+        }
+    })
 }

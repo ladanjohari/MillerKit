@@ -48,7 +48,6 @@ struct LazyListColumn: View {
 
     func modifiedItem(_ item: LazyItem) -> LazyItem {
         let modifiedItem: LazyItem
-        print("YYYY '\(self.prompt)'")
         if !self.prompt.isEmpty, let alternativeSubItems = item.alternativeSubItems {
             modifiedItem = LazyItem(item.name, subItems: { ctx in
                 AsyncStream { cont in

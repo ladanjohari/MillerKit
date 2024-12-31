@@ -14,7 +14,8 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-llbuild2", branch: "main"),
-        .package(url: "https://github.com/apple/swift-async-algorithms", branch: "main")
+        .package(url: "https://github.com/apple/swift-async-algorithms", branch: "main"),
+        .package(url: "https://github.com/swiftlang/swift-testing", branch: "main")
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -28,7 +29,7 @@ let package = Package(
         ),
         .testTarget(
             name: "MillerKitTests",
-            dependencies: ["MillerKit"]
+            dependencies: ["MillerKit", .product(name: "Testing", package: "swift-testing")]
         ),
         .executableTarget(
             name: "JSONBrowser",

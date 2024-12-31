@@ -2,7 +2,7 @@ import SwiftUI
 import TSCUtility
 
 extension LazyItem {
-    func allChildren() -> AsyncStream<LazyItem> {
+    public func allChildren() -> AsyncStream<LazyItem> {
         AsyncStream { cont in
             Task {
                 if let subItems = self.subItems {

@@ -19,7 +19,11 @@ extension Item {
   <meta charset="UTF-8">
 </head>
 """
-        return "\(head)<h1>\(name): \(documentation ?? "")</h1><table border=1><tr>\((subItems ?? []).map { subItem in subItem.toHtml1() }.joined(separator: "\n"))</tr></table>"
+        return """
+<div class='item'>
+\(head)<h1>\(name): \(documentation ?? "")</h1><table border=1><tr>\((subItems ?? []).map { subItem in subItem.toHtml1() }.joined(separator: "\n"))</tr></table>
+</div>
+"""
     }
 
     public func toHtml1() -> String {
@@ -32,9 +36,9 @@ extension Item {
             nameAndDoc = "<b>\(nameAndDoc)</b>"
         }
         if let subItems, subItems.count > 0 {
-            return "<ul><li><details open><summary>\(nameAndDoc)</summary>\((subItems ?? []).map { subItem in subItem.toHtml2() }.joined(separator: "\n"))</details></li></ul>"
+            return "\(nameAndDoc) <br /> \((subItems ?? []).map { subItem in subItem.toHtml2() }.joined(separator: "\n"))"
         } else {
-            return "<ul><li>\(nameAndDoc)</li></ul>"
+            return "\(nameAndDoc)"
         }
     }
 }
