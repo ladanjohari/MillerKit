@@ -1,4 +1,4 @@
-# MillerKit
+# MillerKit [![Swift](https://github.com/ladanjohari/MillerKit/actions/workflows/swift.yml/badge.svg)](https://github.com/ladanjohari/MillerKit/actions/workflows/swift.yml)
 
 MillerKit is a Swift package designed to simplify the implementation of **Miller Columns**, a powerful user interface for navigating hierarchical data. With MillerKit, you can seamlessly integrate this UI pattern into your macOS or iOS applications, offering users an efficient and visually appealing way to browse structured content.
 
@@ -77,7 +77,10 @@ Swift: Version 5.7 or higher.
 Contributions are welcome!
 If you'd like to contribute, please fork the repository and submit a pull request. For major changes, please open an issue first to discuss what you'd like to change.
 
+## See also
 
+* https://github.com/ladanjohari/MillerJSON [![Xcode - Build and Analyze](https://github.com/ladanjohari/MillerJSON/actions/workflows/objective-c-xcode.yml/badge.svg)](https://github.com/ladanjohari/MillerJSON/actions/workflows/objective-c-xcode.yml)
+* https://github.com/ladanjohari/MillerKitExtras [![Swift](https://github.com/ladanjohari/MillerKitExtras/actions/workflows/swift.yml/badge.svg)](https://github.com/ladanjohari/MillerKitExtras/actions/workflows/swift.yml)
 
 ## License
 
