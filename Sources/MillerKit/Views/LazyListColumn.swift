@@ -9,7 +9,7 @@ struct LazyListColumn: View {
     @Binding var selectedItem: String?
     @Binding var selectionsPerColumn: [LazyItem?]
     @State var itemsWithIndex = [(offset: 1, element: LazyItem("foo")), (offset: 2, element: LazyItem("bar"))]
-    @State var showPrompt: Bool = false
+    var showPrompt: Bool = false
     @State var prompt: String = ""
 
     public init(

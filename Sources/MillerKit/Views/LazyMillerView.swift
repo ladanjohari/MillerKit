@@ -6,7 +6,7 @@ public struct LazyMillerView: View {
     @State var selectedItem: LazyItem.ID?
     @State var selectionsPerColumn: [LazyItem?] = Array(repeating: nil, count: 100)
 
-    @State var showPrompt = true
+    var showPrompt = true
 
     private var totalColumns: Int {
         max(selectionsPerColumn.prefix(while: { $0 != nil }).count+1, 4)
