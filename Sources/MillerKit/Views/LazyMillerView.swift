@@ -5,7 +5,9 @@ public struct LazyMillerView: View {
     let ctx: Context
     @State var selectedItem: LazyItem.ID?
     @State var selectionsPerColumn: [LazyItem?] = Array(repeating: nil, count: 100)
-    
+
+    @State var showPrompt = true
+
     private var totalColumns: Int {
         max(selectionsPerColumn.prefix(while: { $0 != nil }).count+1, 4)
     }
@@ -33,11 +35,12 @@ public struct LazyMillerView: View {
         }
     }
 
-    public init(rootStream: AsyncStream<LazyItem>, jumpTo path: [UInt], ctx: Context) {
+    public init(rootStream: AsyncStream<LazyItem>, jumpTo path: [UInt], ctx: Context, showPrompt: Bool = true) {
         self.rootStream = chainStreams(inputStream: rootStream, pureTransform: { item in
             await Self.traverse(path: path, root: item, ctx: ctx) ?? LazyItem("Path not found \(path)")
         })
         self.ctx = ctx
+        self.showPrompt = showPrompt
     }
     
         //    func handleCommandNumber(_ number: Int) {
@@ -75,7 +78,8 @@ public struct LazyMillerView: View {
                             root: $root,
                             selectedItem: $selectedItem,
                             selectionsPerColumn: $selectionsPerColumn,
-                            columnIndex: 0
+                            columnIndex: 0,
+                            showPrompt: showPrompt
                         ).frame(width: desiredWidth).id("scroll-0")
                         
                         ForEach(Array(selectionsPerColumn.compactMap { $0 }.enumerated()), id: \.element.id) { index, selection in

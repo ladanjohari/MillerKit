@@ -2,6 +2,8 @@ import Foundation
 import TSCUtility
 import SwiftUI
 
+// MARK: LayzItem
+
 public struct LazyItem: Identifiable, Equatable {
     public let id: String
     public let urn: String?
@@ -45,6 +47,7 @@ public struct LazyItem: Identifiable, Equatable {
         return nil
     }
 
+    // MARK: tags
     public func tags(ctx: Context) -> AsyncStream<[String]> {
         AsyncStream { cont in
             Task {
@@ -70,6 +73,7 @@ public struct LazyItem: Identifiable, Equatable {
         }
     }
 
+    // MARK: documentation
     public func documentation(ctx: Context) -> AsyncStream<String?> {
         AsyncStream { cont in
             Task {
@@ -116,6 +120,7 @@ public struct LazyItem: Identifiable, Equatable {
         }
     }
 
+    // MARK: Extract priority from name
     public func staticPriority() -> Int {
         staticPriority_().first ?? 999
     }
@@ -147,6 +152,7 @@ public struct LazyItem: Identifiable, Equatable {
     }
 }
 
+// MARK: LayzItem.iconSquare
 
 extension LazyItem {
     func iconSquare(_ text: String) -> some View {

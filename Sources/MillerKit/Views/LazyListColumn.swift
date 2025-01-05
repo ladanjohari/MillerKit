@@ -9,6 +9,7 @@ struct LazyListColumn: View {
     @Binding var selectedItem: String?
     @Binding var selectionsPerColumn: [LazyItem?]
     @State var itemsWithIndex = [(offset: 1, element: LazyItem("foo")), (offset: 2, element: LazyItem("bar"))]
+    @State var showPrompt: Bool = false
     @State var prompt: String = ""
 
     public init(
@@ -16,7 +17,8 @@ struct LazyListColumn: View {
         root: Binding<LazyItem?>,
         selectedItem: Binding<LazyItem.ID?>,
         selectionsPerColumn: Binding<[LazyItem?]>,
-        columnIndex: Int
+        columnIndex: Int,
+        showPrompt: Bool = false
     ) {
         self.ctx = ctx
         self._root = root
@@ -26,6 +28,7 @@ struct LazyListColumn: View {
 
         let candidatePrompt = root.wrappedValue?.prompt() ?? "..."
         self.prompt = candidatePrompt
+        self.showPrompt = showPrompt
     }
 
     private func getBackgroundColor(for item: LazyItem) -> Color {
@@ -87,7 +90,9 @@ struct LazyListColumn: View {
                     selectionsPerColumn[columnIndex] = modifiedItem(item)
                 }
             }
-            TextField("prompt", text: $prompt, axis: .vertical).lineLimit(5, reservesSpace: true)
+            if showPrompt {
+                TextField("prompt", text: $prompt, axis: .vertical).lineLimit(5, reservesSpace: true)
+            }
         }.onChange(of: root) {
             Task {
                 await fetchChildren()
