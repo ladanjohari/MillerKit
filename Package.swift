@@ -30,11 +30,6 @@ let package = Package(
         .testTarget(
             name: "MillerKitTests",
             dependencies: ["MillerKit", .product(name: "Testing", package: "swift-testing")]
-        ),
-        .executableTarget(
-            name: "JSONBrowser",
-            dependencies: ["MillerKit"]
-        ),
-        
+        )
     ]
 )
