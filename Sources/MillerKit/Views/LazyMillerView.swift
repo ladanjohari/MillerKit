@@ -90,7 +90,8 @@ public struct LazyMillerView: View {
                                         root: .constant(firstSelection),
                                         selectedItem: $selectedItem,
                                         selectionsPerColumn: $selectionsPerColumn,
-                                        columnIndex: index+1
+                                        columnIndex: index+1,
+                                        showPrompt: showPrompt
                                     ).frame(width: desiredWidth)
                                 } else {
                                     Text("?")
