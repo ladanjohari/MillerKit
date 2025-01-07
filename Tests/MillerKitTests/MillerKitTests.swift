@@ -9,3 +9,13 @@ import Testing
         }
     })
 }
+
+@Test func example2() async throws {
+    // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+    #expect(numberToLetterSequence(0) == "a")
+    #expect(numberToLetterSequence(28) == "ab")
+    #expect(numberToLetterSequence(280) == "jt")
+    #expect(numberToLetterSequence(158000) == "hyrx")
+    #expect(numberToLetterSequence(-158000) == "a")
+    #expect(numberToLetterSequence(-177777700) == "a")
+}
