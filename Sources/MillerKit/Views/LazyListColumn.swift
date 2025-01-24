@@ -33,7 +33,7 @@ struct LazyListColumn: View {
 
     private func getBackgroundColor(for item: LazyItem) -> Color {
         if item.urn == selectedItem {
-            return Color.blue.opacity(0.5)  // Current selected item is blue
+            return Color.blue  // Current selected item is blue
         } else if selectionsPerColumn.contains(where: { $0?.urn == item.urn }) {
             return Color.gray.opacity(0.3)
         } else if item.name.contains("♦️") {
@@ -77,7 +77,7 @@ struct LazyListColumn: View {
             let itemsWithIndex2: [(offset: Int, element: LazyItem)] = items.enumerated().map { $0 }
             List(.constant(itemsWithIndex2), id: \.element.id, editActions: .move) { x in
                 let (offset, item) = x.wrappedValue
-                modifiedItem(item).body(offset: offset, ctx: ctx).background(getBackgroundColor(for: item))
+                modifiedItem(item).body(offset: offset, ctx: ctx, selected: item.urn == selectedItem).background(getBackgroundColor(for: item)).cornerRadius(5)
                 .onTapGesture {
                     // Set the current item as selected
                     selectedItem = item.urn

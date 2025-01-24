@@ -169,23 +169,24 @@ extension LazyItem {
         iconSquare(numberToLetterSequence(offset+1))
     }
 
-    func body(offset: Int, ctx: Context) -> some View {
-        VStack(alignment: .leading) {
-            HStack {
+    func body(offset: Int, ctx: Context, selected: Bool) -> some View {
+        HStack {
+            self.icon(offset: offset)
+            VStack(alignment: .leading) {
                 if !self.name.isEmpty {
-                    self.icon(offset: offset)
-                    
                         // let priorityStr: String = "(P\(item.priority)) "
                     let priorityStr = ""
-                    
-                    
                     Text("\(self.name)")
                         .font(.headline)
+                        .foregroundColor(selected ? .white : .black)
                 }
-                Spacer()
+                viewDocumentation(ctx: ctx)
                 // viewNumberOfChildren
             }
-            viewDocumentation(ctx: ctx)
-        }.frame(maxWidth: .infinity, alignment: .leading)
+            Spacer()
+            showChevron
+        }
+        .padding(8)
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
