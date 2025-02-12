@@ -21,22 +21,22 @@ public struct LazyItem: Identifiable, Equatable {
         return LazyItem(
             name,
             urn: urn,
+            color: color,
             subItems: subItems,
             attributes: attributes,
             staticAttributes: staticAttributes,
-            alternativeSubItems: alternativeSubItems,
-            color: color
+            alternativeSubItems: alternativeSubItems
         )
     }
 
     public init(
         _ name: String,
         urn: String? = nil,
+        color: Color = .purple, // Default color
         subItems: ((Context) -> AsyncStream<LazyItem>)? = nil,
         attributes: ((Context) -> AsyncStream<Attribute>)? = nil,
         staticAttributes: [Attribute] = [],
-        alternativeSubItems: ((LazyItem, String) async throws  -> AsyncStream<LazyItem>)? = nil,
-        color: Color = .purple // Default color
+        alternativeSubItems: ((LazyItem, String) async throws  -> AsyncStream<LazyItem>)? = nil
     ) {
         self.name = name
         self.subItems = subItems
