@@ -8,6 +8,7 @@ public struct LazyItem: Identifiable, Equatable {
     public let id: String
     public let urn: String?
     public let name: String
+    public let color: Color
     public let subItems: ((Context) -> AsyncStream<LazyItem>)?
     public let attributes: ((Context) -> AsyncStream<Attribute>)?
     public let staticAttributes: [Attribute]
@@ -16,9 +17,16 @@ public struct LazyItem: Identifiable, Equatable {
     public static func == (lhs: LazyItem, rhs: LazyItem) -> Bool {
         return lhs.id == rhs.id && lhs.name == rhs.name
     }
-
     public func withURN(_ urn: String) -> LazyItem {
-        return LazyItem(name, urn: urn, subItems: subItems, attributes: attributes)
+        return LazyItem(
+            name,
+            urn: urn,
+            subItems: subItems,
+            attributes: attributes,
+            staticAttributes: staticAttributes,
+            alternativeSubItems: alternativeSubItems,
+            color: color
+        )
     }
 
     public init(
@@ -27,7 +35,8 @@ public struct LazyItem: Identifiable, Equatable {
         subItems: ((Context) -> AsyncStream<LazyItem>)? = nil,
         attributes: ((Context) -> AsyncStream<Attribute>)? = nil,
         staticAttributes: [Attribute] = [],
-        alternativeSubItems: ((LazyItem, String) async throws  -> AsyncStream<LazyItem>)? = nil
+        alternativeSubItems: ((LazyItem, String) async throws  -> AsyncStream<LazyItem>)? = nil,
+        color: Color = .purple // Default color
     ) {
         self.name = name
         self.subItems = subItems
@@ -36,6 +45,7 @@ public struct LazyItem: Identifiable, Equatable {
         self.urn = urn
         self.staticAttributes = staticAttributes
         self.alternativeSubItems = alternativeSubItems
+        self.color = color
     }
 
     public func prompt() -> String? {
@@ -46,7 +56,8 @@ public struct LazyItem: Identifiable, Equatable {
         }
         return nil
     }
-
+    
+    
     // MARK: tags
     public func tags(ctx: Context) -> AsyncStream<[String]> {
         AsyncStream { cont in
@@ -138,7 +149,7 @@ public struct LazyItem: Identifiable, Equatable {
         guard let regex = try? NSRegularExpression(pattern: pattern) else {
             return []
         }
-        
+
         // Find matches in the input string
         let matches = regex.matches(in: input, range: NSRange(input.startIndex..., in: input))
         
@@ -159,22 +170,22 @@ extension LazyItem {
         Text(text)
             .font(.footnote)  // Smaller text size
             .fontWeight(.bold)
-            .frame(minWidth: 15, minHeight: 15)  // Ensure perfect square
+            .frame(minWidth: 16, minHeight: 16)  // Ensure perfect square
             .background(
-                RoundedRectangle(cornerRadius: 5).fill(.purple)
+                RoundedRectangle(cornerRadius: 5).fill(self.color)
             )
     }
-
+    
     func icon(offset: Int) -> some View {
         iconSquare(numberToLetterSequence(offset+1))
     }
-
+    
     func body(offset: Int, ctx: Context, selected: Bool) -> some View {
         HStack {
             self.icon(offset: offset)
             VStack(alignment: .leading) {
                 if !self.name.isEmpty {
-                        // let priorityStr: String = "(P\(item.priority)) "
+                    // let priorityStr: String = "(P\(item.priority)) "
                     let priorityStr = ""
                     Text("\(self.name)")
                         .font(.headline)
@@ -190,3 +201,4 @@ extension LazyItem {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
+
