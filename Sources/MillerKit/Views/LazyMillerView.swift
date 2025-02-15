@@ -103,11 +103,6 @@ public struct LazyMillerView: View {
                             }.id("scroll-\(index+1)")
                         }
                     }.frame(maxWidth: .infinity)
-                    Divider()
-                    Text("Detail view goes here📝")
-                        .frame(maxWidth: .infinity, maxHeight: 200)
-                        .cornerRadius(8)
-
                 }.scrollIndicators(.visible, axes: .horizontal)
                 ScrollViewReader { scrollView in
                     s.onChange(of: selectionsPerColumn, {
@@ -117,20 +112,23 @@ public struct LazyMillerView: View {
                             scrollView.scrollTo(target, anchor: .leading)
                         }
                     })
-//                    .overlay {
-//                        MouseWheelEventCatcher { delta in
-//                            if let current = selectionsPerColumn.firstIndex(where: { $0?.id == selectedItem }) {
-//                                print(delta)
-//                                if delta > 0 {
-//                                    scrollView.scrollTo("scroll-\(current+1)")
-//                                } else {
-//                                    scrollView.scrollTo("scroll-\(current-1)")
-//                                }
-//                            }
-//                        }
-//                    }
+                    //                    .overlay {
+                    //                        MouseWheelEventCatcher { delta in
+                    //                            if let current = selectionsPerColumn.firstIndex(where: { $0?.id == selectedItem }) {
+                    //                                print(delta)
+                    //                                if delta > 0 {
+                    //                                    scrollView.scrollTo("scroll-\(current+1)")
+                    //                                } else {
+                    //                                    scrollView.scrollTo("scroll-\(current-1)")
+                    //                                }
+                    //                            }
+                    //                        }
+                    //                    }
                 }.frame(maxWidth: geometry.size.width*5)
             }.frame(maxHeight: .infinity)
+            Text("Detail view goes here📝")
+                .frame(maxWidth: .infinity, maxHeight: 200)
+                .cornerRadius(8)
         }
         .frame(maxHeight: .infinity)
     }
