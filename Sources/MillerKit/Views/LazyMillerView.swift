@@ -72,7 +72,6 @@ public struct LazyMillerView: View {
 
     var millerColumns: some View {
         return VStack(spacing: 0) {
-            Text("📝")
             GeometryReader { geometry in
                 // let desiredWidth = geometry.size.width / CGFloat(totalColumns)
                 let desiredWidth = CGFloat(400)
@@ -103,6 +102,7 @@ public struct LazyMillerView: View {
                                 }
                             }.id("scroll-\(index+1)")
                         }
+                        Text("📝")
                     }.frame(maxWidth: .infinity)
                 }.scrollIndicators(.visible, axes: .horizontal)
                 ScrollViewReader { scrollView in
