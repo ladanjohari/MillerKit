@@ -35,7 +35,11 @@ public struct LazyMillerView: View {
         }
     }
 
-    public init(rootStream: AsyncStream<LazyItem>, jumpTo path: [UInt], ctx: Context, showPrompt: Bool = true) {
+    public init(rootStream: AsyncStream<LazyItem>,
+                jumpTo path: [UInt],
+                ctx: Context,
+                showPrompt: Bool = true
+    ) {
         self.rootStream = chainStreams(inputStream: rootStream, pureTransform: { item in
             await Self.traverse(path: path, root: item, ctx: ctx) ?? LazyItem("Path not found \(path)")
         })
@@ -68,6 +72,7 @@ public struct LazyMillerView: View {
 
     var millerColumns: some View {
         return VStack(spacing: 0) {
+            Text("📝")
             GeometryReader { geometry in
                 // let desiredWidth = geometry.size.width / CGFloat(totalColumns)
                 let desiredWidth = CGFloat(400)

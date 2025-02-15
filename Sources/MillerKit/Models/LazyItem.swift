@@ -9,6 +9,7 @@ public struct LazyItem: Identifiable, Equatable {
     public let urn: String?
     public let name: String
     public let color: Color
+    public let  detailView: String
     public let subItems: ((Context) -> AsyncStream<LazyItem>)?
     public let attributes: ((Context) -> AsyncStream<Attribute>)?
     public let staticAttributes: [Attribute]
@@ -22,6 +23,7 @@ public struct LazyItem: Identifiable, Equatable {
             name,
             urn: urn,
             color: color,
+            detailView: detailView,
             subItems: subItems,
             attributes: attributes,
             staticAttributes: staticAttributes,
@@ -33,6 +35,7 @@ public struct LazyItem: Identifiable, Equatable {
         _ name: String,
         urn: String? = nil,
         color: Color = .purple, // Default color
+        detailView: String = "",
         subItems: ((Context) -> AsyncStream<LazyItem>)? = nil,
         attributes: ((Context) -> AsyncStream<Attribute>)? = nil,
         staticAttributes: [Attribute] = [],
@@ -46,6 +49,7 @@ public struct LazyItem: Identifiable, Equatable {
         self.staticAttributes = staticAttributes
         self.alternativeSubItems = alternativeSubItems
         self.color = color
+        self.detailView = detailView
     }
 
     public func prompt() -> String? {
@@ -56,8 +60,7 @@ public struct LazyItem: Identifiable, Equatable {
         }
         return nil
     }
-    
-    
+
     // MARK: tags
     public func tags(ctx: Context) -> AsyncStream<[String]> {
         AsyncStream { cont in
