@@ -102,8 +102,12 @@ public struct LazyMillerView: View {
                                 }
                             }.id("scroll-\(index+1)")
                         }
-                        Text("📝")
                     }.frame(maxWidth: .infinity)
+                    Divider()
+                    Text("Detail view goes here📝")
+                        .frame(maxWidth: .infinity, maxHeight: 200)
+                        .cornerRadius(8)
+
                 }.scrollIndicators(.visible, axes: .horizontal)
                 ScrollViewReader { scrollView in
                     s.onChange(of: selectionsPerColumn, {
